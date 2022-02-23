@@ -23,6 +23,7 @@ export class AppComponent {
   }
 
   comprobar() {
+    console.log(this.palabrasService.comprobarPalabra(this.palabraE));
     console.log(this.palabrasService.validarPalabra(this.palabraE));
   }
 }
