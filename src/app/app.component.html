@@ -6,3 +6,6 @@
     <input [(ngModel)]="palabraE" type="text">
     <button (click)="comprobar()">Comprobar</button>
 </div>
+<div *ngIf="error">
+    La palabra no existe en el diccionario
+</div>

@@ -10,6 +10,7 @@ export class AppComponent {
   title = 'palabrick';
 
   public palabraE = "";
+  public error = false;
 
   public palabra: String = "";
 
@@ -23,7 +24,12 @@ export class AppComponent {
   }
 
   comprobar() {
-    console.log(this.palabrasService.comprobarPalabra(this.palabraE));
-    console.log(this.palabrasService.validarPalabra(this.palabraE));
+    if (this.palabrasService.comprobarPalabra(this.palabraE)) {
+      this.error = false;
+      this.palabrasService.validarPalabra(this.palabraE);
+    }
+    else {
+      this.error = true;
+    }
   }
 }
