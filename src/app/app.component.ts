@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { PalabrasService } from './servicios/palabras.service';
+import { FilaComponent } from './componentes/fila/fila.component';
+import { TableroComponent } from './componentes/tablero/tablero.component';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +14,12 @@ export class AppComponent {
   public palabraE = "";
   public error = false;
 
+  private intentos = 0;
+
   public palabra: String = "";
+
+  @ViewChild(TableroComponent) tablero!: TableroComponent;
+
 
   constructor(private palabrasService: PalabrasService) {
 
@@ -35,5 +42,11 @@ export class AppComponent {
     else {
       this.error = true;
     }
+
+    this.tablero.printFilas();
+
+    //console.log(this.filas);
+
+    this.intentos++;
   }
 }

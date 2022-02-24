@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+
+.fila {
+    display: flex;
+    height: 50px;
+    padding: 5px 0 5px 0;
+}
+
+.celda {
+    border: 2px solid black;
+    width: 50px;
+    height: 50px;
+    margin: 0 2px 0 2px;
+}
