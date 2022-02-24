@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { CeldaComponent } from '../celda/celda.component';
 import { FilaComponent } from '../fila/fila.component';
 
 @Component({
@@ -9,6 +10,7 @@ import { FilaComponent } from '../fila/fila.component';
 export class TableroComponent implements OnInit {
 
   //private filas!: Array<FilaComponent>;
+
 
   @ViewChildren(FilaComponent) cfilas!: QueryList<FilaComponent>;
 
@@ -25,9 +27,18 @@ export class TableroComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  printFilas() {
-    console.log(this.cfilas);
+  setLetra(f: number, c: number, l: string) {
+
+    let cx: CeldaComponent | undefined;
+    let fx: FilaComponent | undefined  = this.cfilas.get(f);
+
+    if (fx) {
+      cx = fx.cceldas.get(c);
+
+      cx?.setLetra(l);
+    }
   }
+
   /*
   inicializarTablero(filas: number, columnas: number) {
 

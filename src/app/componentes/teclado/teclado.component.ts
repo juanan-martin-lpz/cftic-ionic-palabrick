@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { FilaComponent } from '../fila/fila.component';
 import { CeldaComponent } from '../celda/celda.component';
 
@@ -8,6 +8,8 @@ import { CeldaComponent } from '../celda/celda.component';
   styleUrls: ['./teclado.component.css']
 })
 export class TecladoComponent implements OnInit, AfterViewInit {
+
+  @Output() public letraPulsada: EventEmitter<string> = new EventEmitter<string>();
 
   @Input()
   public filas!: number;
@@ -52,5 +54,9 @@ export class TecladoComponent implements OnInit, AfterViewInit {
   }
 
   public range = (n: number) => Array.from({length: n}, (value, key) => key)
+
+  click(tecla: string) {
+    this.letraPulsada.emit(tecla);
+  }
 
 }

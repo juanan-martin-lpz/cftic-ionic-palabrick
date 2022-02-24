@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { CeldaComponent } from '../celda/celda.component';
 
 @Component({
@@ -7,6 +7,9 @@ import { CeldaComponent } from '../celda/celda.component';
   styleUrls: ['./fila.component.css']
 })
 export class FilaComponent implements OnInit {
+
+
+  @Output() public letraPulsada: EventEmitter<string> = new EventEmitter<string>();
 
   @Input()
   public columnas!: number;
@@ -20,5 +23,9 @@ export class FilaComponent implements OnInit {
   }
 
   public range = (n: number) => Array.from({length: n}, (value, key) => key)
+
+  click(tecla: string) {
+    this.letraPulsada.emit(tecla);
+  }
 
 }

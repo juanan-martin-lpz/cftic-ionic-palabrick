@@ -43,8 +43,6 @@ export class AppComponent {
       this.error = true;
     }
 
-    this.tablero.printFilas();
-
     //console.log(this.filas);
 
     this.intentos++;

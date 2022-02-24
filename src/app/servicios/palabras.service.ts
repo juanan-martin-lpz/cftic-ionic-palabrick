@@ -2,23 +2,25 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { URL_SERVIDOR } from '../config/config';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PalabrasService {
 
-  constructor(private http: HttpClient) {
-
-    this.obtenerFicheroPalabras();
-
-  }
-
   // Array de palabras del diccionario
-  private palabras: Array<string> = [];
+  public palabras: Array<string> = [];
 
   // Palabra objetivo
   private palabraActual: string = "";
+
+
+  constructor(private http: HttpClient) {
+
+    //this.obtenerFicheroPalabras().subscribe(json => this.palabras = json);
+
+  }
 
   // Array con los indices de los semiaciertos cancelados
   private semiaciertosIndice: number[] = [];
@@ -30,10 +32,10 @@ export class PalabrasService {
    *
    * @todo Gestionar los errores de conexion/varios
    */
-  private obtenerFicheroPalabras(): void {
-    this.http.get<Array<string>>(URL_SERVIDOR).subscribe(json => {
-      this.palabras = json;
-    });
+  public obtenerFicheroPalabras(): void {
+
+    this.http.get<Array<string>>(URL_SERVIDOR).subscribe(json => this.palabras = json);
+
   }
 
   /**
@@ -61,7 +63,8 @@ export class PalabrasService {
    */
   private comprobarLetra(letra: string, indice: number, a: Array<string>) {
 
-    const letrasActuales = this.palabraActual.split('');
+     const letrasActuales = this.palabraActual.split('');
+
 
     if (letra == letrasActuales[indice] ) {
       //console.log(`${letra} : 1`);
@@ -134,6 +137,9 @@ export class PalabrasService {
 
   // Interfaz publica.
 
+  storeArray(a: string[]) {
+    this.palabras = a;
+  }
   /**
    * Obtiene una palabra del diccionario y la pone en juego
    *
