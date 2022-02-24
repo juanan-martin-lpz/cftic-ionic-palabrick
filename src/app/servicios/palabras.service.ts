@@ -14,17 +14,33 @@ export class PalabrasService {
 
   }
 
+  // Array de palabras del diccionario
   private palabras: Array<string> = [];
+
+  // Palabra objetivo
   private palabraActual: string = "";
+
+  // Array con los indices de los semiaciertos cancelados
+  private semiaciertosIndice: number[] = [];
 
   // Interfaz privada
 
+  /**
+   * Descarga el fichero de palabras desde la URL especificada en config y carga el array en una variable
+   *
+   * @todo Gestionar los errores de conexion/varios
+   */
   private obtenerFicheroPalabras(): void {
     this.http.get<Array<string>>(URL_SERVIDOR).subscribe(json => {
       this.palabras = json;
     });
   }
 
+  /**
+   * Retorna una palabra aleatoria desde el array de palabras
+   *
+   * @returns string palabra aleatoria obtenida desde el array de palabras
+   */
   private obtenerPalabraRandom(): string {
 
     const numero = Math.floor(Math.random() * (this.palabras.length));
@@ -33,11 +49,15 @@ export class PalabrasService {
   }
 
   /**
+   * Comprueba si una letra coincide o no
    *
-   * @param letra
-   * @param indice
-   * @param a
-   * @returns
+   * Si la letra coincide con la misma posicion en el array objetivo retornamos 1, 0 si no lo hace
+   * y -1 si la letra esta en el array pero no en esa posicion
+   *
+   * @param letra letra a verificar
+   * @param indice indice a procesar en el array objetivo
+   * @param a array con la palabra de jugador. No usado pero necesario para el map
+   * @returns number 1, 0 o -1
    */
   private comprobarLetra(letra: string, indice: number, a: Array<string>) {
 
@@ -58,10 +78,64 @@ export class PalabrasService {
       }
     }
   }
+
+  /**
+   * Busca una letra en el array objetivo para cancelar
+   *
+   * Se cancela insertando el indice cancelado en el array de semiaciertosIndices
+   * Si ya existe un semiacierto cancelado, subsecuentes busquedas retornaran 0
+   *
+   * @param letra letra a buscar
+   * @param pos posicion desde la que buscar
+   * @returns number 0 o -1
+   */
+  private buscarValido(letra: string,  pos: number): any {
+
+    // Arry de letras objetivo
+    const letras = this.palabraActual.toUpperCase().split('');
+
+    // Obtenemos el indice de la siguiente letra
+    let n = letras.indexOf(letra, pos + 1);
+
+    // Si no hay mas ocurrencias desde la posicion indicada retornamos con 0
+    if (n == -1) {
+      return 0;
+    }
+
+    // Si el indice ya esta insertado, buscamos la siguiente
+    if (this.semiaciertosIndice.includes(n)) {
+
+      return this.buscarValido(letra, n + 1);
+
+    }
+    else {  // Si no, la insertamos y retornamos -1
+      this.semiaciertosIndice.push(n);
+      return -1;
+    }
+  }
+
+  /**
+   * Corrige los semiaciertos
+   *
+   * Si una posiciion determinada es un semiacierto realiza una busqueda para obtener el resultado corregido
+   * En caso contrario, retorna el resultado que hubiere
+   *
+   * @param pjugador array con la palabra del jugador
+   * @param presultado array con el resultado Wordle
+   * @returns number[] array con el resultado extendido
+   */
+  private repeticiones(pjugador: string[], presultado: number[]): number[] {
+
+    // Si es un semiacierto buscamos a quien cancela. Retorna -1 si cancela a una letra o 0 si no lo hace
+    const res = presultado.map((item, index, array) => item == -1 ? this.buscarValido(pjugador[index], index) : item);
+
+    return res;
+  }
+
   // Interfaz publica.
 
   /**
-   * Obtiene una palabra del dicciionario y la pone en juego
+   * Obtiene una palabra del diccionario y la pone en juego
    *
    * Almacena la palabra para futuros usos. La palabra cambiara con cada llamada
    *
@@ -70,6 +144,8 @@ export class PalabrasService {
   public obtenerPalabra(): string {
 
     this.palabraActual = this.obtenerPalabraRandom();
+    this.semiaciertosIndice = [];
+
     return this.palabraActual;
 
   }
@@ -80,55 +156,27 @@ export class PalabrasService {
    * Comprueba las letras de la palabra pasada contra la palabra almacenada en @palabraActual
    *
    * @param palabra La palabra a validar
+   * @param metodoExtendido Usa el metodo extendido
+   *
    * @returns
    **/
-  public validarPalabra(palabra: string): Array<number> {
+  public validarPalabra(palabra: string, metodoExtendido: boolean = false): Array<number> {
 
     const palabras = palabra.toUpperCase().split('');
 
     // Comprobamos las letras, nos da un resultado "en bruto"
-    const a = <Array<number>>  palabras.map((l,i,a) => this.comprobarLetra(l,i,a));
+    let resultados = <Array<number>>  palabras.map((l,i,a) => this.comprobarLetra(l,i,a));
 
+    //console.log(resultados);
 
-    // Creamos un array con las repeticiones de cada letra. Si no estuviera repetida -1, caso contrario el indice de la siguiente repeticion
-    // La ultima de las repeticiones tendra -1
-    const b = palabras.map((item,
-                                      index,
-                                      array) => {
-                                                                  //console.log(item);
-                                                                  return array.includes(item, index + 1) ? array.indexOf(item, index+1): -1 })
+    // Refinamos los resultados
+    if (metodoExtendido) {
+      resultados = this.repeticiones(palabras, resultados);
+      //console.log(resultados);
+    }
 
-    //console.log("Repeticiones");
-    console.log(b);
-
-
-    // Recalculamos el resultado e otra repeticion, miramos la repeticion
-    // Dada una letra en la palabra objetivo, si en la palabra de usuario hay dos ocurrencias, apareceran ambas como semiacierto si una de ellas no es acierto
-    // El control no es exhaustivo. Los casos de tres letras repetidas en el diccionario son infimos y son casos extremos
-    const c = b.map((item, index, array): number => this.scan(item, index, array, a));
-
-
-    console.log(a);
-    console.log(c);
-
-    return c;
-
+    return resultados;
   }
-
-  private scan = (item: number, index: number, array: number[], a: number[]): number => {
-
-    // si resultado es -1 y la repeticion es -1, entonces -1.
-    // si resultado es -1 y la repeticion es 1, entonces 0
-    // si no resultado
-    let r2 = (m: number) => (m == -1 && a[item] == -1) ? m : (m == -1 && a[item] == 1) ? 0 : m;
-
-    // Si el resultado es cero o uno, resultado, si no entonces es menos uno (ver caso arriba)
-    let r1 = (a[index] == 1 || a[index] == 0) ? a[index] : r2(a[index]);
-
-    return r1;
-
-  }
-
 
   /**
    * Comprueba que la palabra este en el diccionario
