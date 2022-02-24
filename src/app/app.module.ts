@@ -7,13 +7,17 @@ import { AppComponent } from './app.component';
 import { TableroComponent } from './componentes/tablero/tablero.component';
 import { FilaComponent } from './componentes/fila/fila.component';
 import { CeldaComponent } from './componentes/celda/celda.component';
+import { JuegoComponent } from './componentes/juego/juego.component';
+import { TecladoComponent } from './componentes/teclado/teclado.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TableroComponent,
     FilaComponent,
-    CeldaComponent
+    CeldaComponent,
+    JuegoComponent,
+    TecladoComponent
   ],
   imports: [
     BrowserModule,

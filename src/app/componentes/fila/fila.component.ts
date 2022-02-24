@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { CeldaComponent } from '../celda/celda.component';
 
 @Component({
   selector: 'app-fila',
@@ -9,6 +10,8 @@ export class FilaComponent implements OnInit {
 
   @Input()
   public columnas!: number;
+
+  @ViewChildren(CeldaComponent) public cceldas!: QueryList<CeldaComponent>;
 
   constructor() { }
 
