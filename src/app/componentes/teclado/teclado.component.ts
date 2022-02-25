@@ -14,6 +14,8 @@ export class TecladoComponent implements OnInit, AfterViewInit {
   @Input()
   public filas!: number;
 
+  public styleClasses = ["tecla", "border-blue"];
+
   @ViewChildren(FilaComponent) public cfilas!: QueryList<FilaComponent>;
 
   @Input()
@@ -54,6 +56,21 @@ export class TecladoComponent implements OnInit, AfterViewInit {
   }
 
   public range = (n: number) => Array.from({length: n}, (value, key) => key)
+
+  addStyleClass(style: string) {
+    if (!this.styleClasses.includes(style)) {
+      this.styleClasses.push(style);
+    }
+  }
+
+  removeStyleClass(style: string) {
+    this.styleClasses = this.styleClasses.filter(c => c != style);
+
+  }
+
+  clearStyleClasses(): void {
+    this.styleClasses = [];
+  }
 
   click(tecla: string) {
     this.letraPulsada.emit(tecla);

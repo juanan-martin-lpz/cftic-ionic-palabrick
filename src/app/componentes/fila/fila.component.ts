@@ -14,6 +14,8 @@ export class FilaComponent implements OnInit {
   @Input()
   public columnas!: number;
 
+  @Input()
+  public styleClasses!: string[];
   @ViewChildren(CeldaComponent) public cceldas!: QueryList<CeldaComponent>;
 
   constructor() { }

@@ -20,6 +20,8 @@ export class TableroComponent implements OnInit {
   @Input()
   public columnas!: number;
 
+  public styleClasses = ["celda", "border-blue"];
+
   constructor() { }
 
   public range = (n: number) => Array.from({length: n}, (value, key) => key)
@@ -39,18 +41,18 @@ export class TableroComponent implements OnInit {
     }
   }
 
-  /*
-  inicializarTablero(filas: number, columnas: number) {
-
-    for(let i:number = 0; i < filas; i++) {
-      let fila = new FilaComponent();
-
-      for (let j: number = 0; j < columnas; j++) {
-        let celda = new CeldaComponent();
-
-      }
+  addStyleClass(style: string) {
+    if (!this.styleClasses.includes(style)) {
+      this.styleClasses.push(style);
     }
   }
-  */
 
+  removeStyleClass(style: string) {
+    this.styleClasses = this.styleClasses.filter(c => c != style);
+
+  }
+
+  clearStyleClasses(): void {
+    this.styleClasses = [];
+  }
 }

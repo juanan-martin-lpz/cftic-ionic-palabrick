@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { PalabrasService } from 'src/app/servicios/palabras.service';
 import { TableroComponent } from '../tablero/tablero.component';
+import { TecladoComponent } from '../teclado/teclado.component';
 
 /**
  * La clase Juego integra todos los mecanismos del juego como son el Teclado, el Tablero, Servicio de Palabras, etc..
@@ -33,6 +34,7 @@ export class JuegoComponent implements OnInit {
   public columnas!: number;
 
   @ViewChild(TableroComponent) tablero!: TableroComponent;
+  @ViewChild(TecladoComponent) teclado!: TecladoComponent;
 
   constructor(private palabrasService: PalabrasService) {
     // Se puede inicializar via html tag con [filas]="5" [columnas]="5" o por aqui
@@ -70,6 +72,7 @@ export class JuegoComponent implements OnInit {
 
 
         let resultado: number[] = this.palabrasService.validarPalabra(this.palabra, true);
+
         console.log(resultado);
         // Chequear si todos son unos
 
@@ -77,6 +80,8 @@ export class JuegoComponent implements OnInit {
         // decorar letras
 
         this.intento++;
+        this.letra = 0;
+        this.palabra = "";
 
       }
       else {
