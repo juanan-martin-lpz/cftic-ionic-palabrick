@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { PalabrasService } from 'src/app/servicios/palabras.service';
 import { TableroComponent } from '../tablero/tablero.component';
 
@@ -27,6 +27,8 @@ export class JuegoComponent implements OnInit {
 
   public error: boolean = false;
 
+  public ready = false;
+
   @Input()
   public columnas!: number;
 
@@ -38,13 +40,19 @@ export class JuegoComponent implements OnInit {
     this.columnas = this.longitud;
     //
 
-    let p = this.palabrasService.obtenerPalabra();
    }
 
   ngOnInit(): void {
 
+    this.palabrasService.obtenerFicheroPalabras();
+
   }
 
+  empezar(){
+
+    this.palabrasService.obtenerPalabra();
+
+  }
 
   click(tecla: string) {
 

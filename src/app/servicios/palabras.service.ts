@@ -12,13 +12,15 @@ export class PalabrasService {
   // Array de palabras del diccionario
   public palabras: Array<string> = [];
 
+  public fileLoaded = false;
+
   // Palabra objetivo
   private palabraActual: string = "";
 
 
   constructor(private http: HttpClient) {
 
-    //this.obtenerFicheroPalabras().subscribe(json => this.palabras = json);
+    //this.obtenerFicheroPalabras(); //.subscribe(json => this.palabras = json);
 
   }
 
@@ -32,9 +34,16 @@ export class PalabrasService {
    *
    * @todo Gestionar los errores de conexion/varios
    */
-  public obtenerFicheroPalabras(): void {
+  public async obtenerFicheroPalabras(): Promise<void> {
 
-    this.http.get<Array<string>>(URL_SERVIDOR).subscribe(json => this.palabras = json);
+    this.fileLoaded = false;
+
+    //this.http.get<Array<string>>(URL_SERVIDOR).subscribe(json => this.palabras = json);
+      await fetch(URL_SERVIDOR)
+        .then(response => response.json()
+        .then(data => this.palabras = data))
+        .then(() => console.log("completado"))
+        .catch(err => console.log(err));
 
   }
 
@@ -47,7 +56,12 @@ export class PalabrasService {
 
     const numero = Math.floor(Math.random() * (this.palabras.length));
 
-    return this.palabras[numero];
+    console.log(this.palabras)
+    let p = this.palabras[numero];
+
+    console.log(p)
+
+    return p;
   }
 
   /**
@@ -152,6 +166,8 @@ export class PalabrasService {
     this.palabraActual = this.obtenerPalabraRandom();
     this.semiaciertosIndice = [];
 
+    console.log(this.palabraActual);
+
     return this.palabraActual;
 
   }
@@ -169,6 +185,7 @@ export class PalabrasService {
   public validarPalabra(palabra: string, metodoExtendido: boolean = false): Array<number> {
 
     const palabras = palabra.toUpperCase().split('');
+
 
     // Comprobamos las letras, nos da un resultado "en bruto"
     let resultados = <Array<number>>  palabras.map((l,i,a) => this.comprobarLetra(l,i,a));
@@ -191,9 +208,14 @@ export class PalabrasService {
    *
    * @returns boolean
    **/
-  public comprobarPalabra(palabra: string): boolean {
+  public comprobarPalabra(pal: string): boolean {
 
-    return this.palabras.includes(palabra.toUpperCase()) || false;
+    console.log(pal)
+    const i = this.palabras.includes(pal.toUpperCase());
+
+    console.log(i);
+
+    return i;
 
   }
 }
