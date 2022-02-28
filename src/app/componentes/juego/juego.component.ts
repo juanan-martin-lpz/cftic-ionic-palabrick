@@ -46,7 +46,8 @@ export class JuegoComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.palabrasService.obtenerFicheroPalabras();
+    this.palabrasService.obtenerFicheroPalabras().then(() => this.palabrasService.obtenerPalabra());
+    //this.palabrasService.obtenerPalabra();
 
   }
 
@@ -75,7 +76,25 @@ export class JuegoComponent implements OnInit {
 
         console.log(resultado);
         // Chequear si todos son unos
-
+        for (let i=0; i < this.columnas; i++) {
+          switch (resultado[i]) {
+            case -1: {
+              this.tablero.setResult(this.intento, i, "semiacierto");
+              break;
+            }
+            case 0: {
+              this.tablero.setResult(this.intento, i, "fallo");
+              break;
+            }
+            case 1: {
+              this.tablero.setResult(this.intento, i, "acierto");
+              break;
+            }
+            default: {
+              break;
+            }
+          }
+        }
         // si no..
         // decorar letras
 

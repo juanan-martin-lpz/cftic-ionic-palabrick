@@ -14,7 +14,7 @@ export class TecladoComponent implements OnInit, AfterViewInit {
   @Input()
   public filas!: number;
 
-  public styleClasses = ["tecla", "border-blue"];
+  public styleClasses = ["tecla", "border-grey"];
 
   @ViewChildren(FilaComponent) public cfilas!: QueryList<FilaComponent>;
 
@@ -29,7 +29,7 @@ export class TecladoComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    const aletras: string[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+    const aletras: string[] = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split('');
 
     let counter = 0;
 

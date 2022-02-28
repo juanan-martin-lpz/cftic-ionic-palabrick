@@ -21,7 +21,6 @@ export class CeldaComponent implements OnInit {
     this.letra = "";
   }
 
-  /*
   addStyleClass(style: string) {
     if (!this.styleClasses.includes(style)) {
       this.styleClasses.push(style);
@@ -32,7 +31,7 @@ export class CeldaComponent implements OnInit {
     this.styleClasses = this.styleClasses.filter(c => c != style);
 
   }
-  */
+
 
   setLetra(letra: string) {
     this.letra = letra;

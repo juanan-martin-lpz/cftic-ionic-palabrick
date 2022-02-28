@@ -1,11 +1,11 @@
 <h1>Palabrick</h1>
-
+<!--
 <button (click)="empezar()">Empezar</button>
+-->
 
 <app-tablero [filas]=filas [columnas]=columnas></app-tablero>
 
 <h3 *ngIf="error">No existe la palabra</h3>
-<div class="separador">&nbsp;</div>
 
 
 <app-teclado (letraPulsada)="click($event)"></app-teclado>

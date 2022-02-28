@@ -20,13 +20,26 @@ export class TableroComponent implements OnInit {
   @Input()
   public columnas!: number;
 
-  public styleClasses = ["celda", "border-blue"];
+  public styleClasses = ["celda", "border-black", "none"];
 
   constructor() { }
 
   public range = (n: number) => Array.from({length: n}, (value, key) => key)
 
   ngOnInit(): void {
+  }
+
+  setResult(f: number, c: number, l: string) {
+
+    let cx: CeldaComponent | undefined;
+    let fx: FilaComponent | undefined  = this.cfilas.get(f);
+
+    if (fx) {
+      cx = fx.cceldas.get(c);
+
+      cx?.removeStyleClass("none");
+      cx?.addStyleClass(l);
+    }
   }
 
   setLetra(f: number, c: number, l: string) {
