@@ -34,4 +34,12 @@ export class FilaComponent implements OnInit {
     this.letraPulsada.emit(tecla);
   }
 
+  hideEmpty() {
+    this.cceldas.forEach(celda => {
+      if (typeof celda.letra == 'undefined') {
+        celda.clearStyleClass();
+        celda.addStyleClass("hide");
+      }
+    });
+  }
 }

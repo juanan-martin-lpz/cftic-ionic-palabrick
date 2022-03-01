@@ -16,29 +16,34 @@ export class TecladoComponent implements OnInit, AfterViewInit {
 
   public styleClasses = ["tecla", "border-grey"];
 
+  private readonly sletras = "QWERTYUIOPASDFGHJKLÑZXCVBNM";
+  private readonly aletras: string[] = this.sletras.split('');
+
   @ViewChildren(FilaComponent) public cfilas!: QueryList<FilaComponent>;
 
   @Input()
   public columnas!: number;
   constructor() {
-    this.filas = 4;
-    this.columnas = 7;
+    this.filas = 3;
+    this.columnas = 10;
    }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    const aletras: string[] = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split('');
+    //const aletras: string[] = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split('');
 
     let counter = 0;
 
-    for(let i = 0; i < 4; i++) {
-      for(let j = 0; j < 7; j++) {
-        this.setText(i, j, aletras[counter]);
+    for(let i = 0; i < this.filas; i++) {
+      for(let j = 0; j < this.columnas; j++) {
+        this.setText(i, j, this.aletras[counter]);
         counter++;
       }
     }
+
+    this.hideEmpty();
   }
 
   setText(f: number, c: number, t: string) {
@@ -57,6 +62,10 @@ export class TecladoComponent implements OnInit, AfterViewInit {
 
   public range = (n: number) => Array.from({length: n}, (value, key) => key)
 
+  hideEmpty() {
+    this.cfilas.forEach(f => f.hideEmpty());
+  }
+
   addStyleClass(style: string) {
     if (!this.styleClasses.includes(style)) {
       this.styleClasses.push(style);
@@ -74,6 +83,28 @@ export class TecladoComponent implements OnInit, AfterViewInit {
 
   click(tecla: string) {
     this.letraPulsada.emit(tecla);
+  }
+
+  setResult(f: number, c: number, l: string) {
+
+    let cx: CeldaComponent | undefined;
+    let fx: FilaComponent | undefined  = this.cfilas.get(f);
+
+    if (fx) {
+      cx = fx.cceldas.get(c);
+
+      cx?.removeStyleClass("none");
+      cx?.addStyleClass(l);
+    }
+  }
+
+  getKeyCoordinates(l: string): number[] {
+
+    const pos = this.sletras.indexOf(l);
+    const x = Math.floor(pos/this.columnas);
+    const y = pos % this.columnas;
+
+    return [x, y];
   }
 
 }

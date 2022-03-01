@@ -14,7 +14,7 @@ export class CeldaComponent implements OnInit {
   @Output() public letraPulsada: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() {
-    //this.styleClasses = "";
+    //this.styleClasses = ["hide"];
   }
 
   ngOnInit(): void {
@@ -41,4 +41,7 @@ export class CeldaComponent implements OnInit {
     this.letraPulsada.emit(this.letra);
   }
 
+  clearStyleClass() {
+    this.styleClasses = [];
+  }
 }

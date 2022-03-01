@@ -80,14 +80,22 @@ export class JuegoComponent implements OnInit {
           switch (resultado[i]) {
             case -1: {
               this.tablero.setResult(this.intento, i, "semiacierto");
+              const k = this.teclado.getKeyCoordinates(this.palabra[i]);
+              this.teclado.setResult(k[0], k[1], "semiacierto");
+
               break;
             }
             case 0: {
               this.tablero.setResult(this.intento, i, "fallo");
+              const k = this.teclado.getKeyCoordinates(this.palabra[i]);
+              this.teclado.setResult(k[0], k[1], "fallo");
               break;
             }
             case 1: {
               this.tablero.setResult(this.intento, i, "acierto");
+              const k = this.teclado.getKeyCoordinates(this.palabra[i]);
+              this.teclado.setResult(k[0], k[1], "acierto");
+
               break;
             }
             default: {
