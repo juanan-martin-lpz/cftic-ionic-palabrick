@@ -57,8 +57,7 @@ export class PalabrasService {
     const numero = Math.floor(Math.random() * (this.palabras.length));
 
     console.log(this.palabras)
-    //let p = this.palabras[numero];
-    let p = "GUIJA";
+    let p = this.palabras[numero];
     console.log(p)
 
     return p;
@@ -106,28 +105,43 @@ export class PalabrasService {
    * @param pos posicion desde la que buscar
    * @returns number 0 o -1
    */
-  private buscarValido(letra: string,  pos: number): any {
+  private buscarValido(letra: string, array: number[],  pos: number): any {
 
     // Arry de letras objetivo
     const letras = this.palabraActual.toUpperCase().split('');
 
+    let n =-1;
+
     // Obtenemos el indice de la siguiente letra
-    let n = letras.indexOf(letra, pos + 1);
+    if (pos < array.length) {
+      n = letras.indexOf(letra, pos + 1);
+    }
+    else {
+      n = letras.indexOf(letra, 0);
 
-    // Si no hay mas ocurrencias desde la posicion indicada retornamos con 0
+      if (n == array.length -1) {
+        n =-1;
+      }
+    }
+
     if (n == -1) {
-      return 0;
-    }
-
-    // Si el indice ya esta insertado, buscamos la siguiente
-    if (this.semiaciertosIndice.includes(n)) {
-
-      return this.buscarValido(letra, n + 1);
-
-    }
-    else {  // Si no, la insertamos y retornamos -1
-      this.semiaciertosIndice.push(n);
       return -1;
+    }
+    else {
+
+      if (this.semiaciertosIndice.includes(n)) {
+        return this.buscarValido(letra, array,  n + 1);
+      }
+      else {
+        if (array[n] == 1) {
+          this.semiaciertosIndice.push(n);
+          return 0;
+        }
+        else {
+          return -1;
+        }
+
+      }
     }
   }
 
@@ -144,7 +158,7 @@ export class PalabrasService {
   private repeticiones(pjugador: string[], presultado: number[]): number[] {
 
     // Si es un semiacierto buscamos a quien cancela. Retorna -1 si cancela a una letra o 0 si no lo hace
-    const res = presultado.map((item, index, array) => item == -1 ? this.buscarValido(pjugador[index], 0) : item);
+    const res = presultado.map((item, index, array) => item == -1 ? this.buscarValido(pjugador[index], array, 0) : item);
 
     return res;
   }

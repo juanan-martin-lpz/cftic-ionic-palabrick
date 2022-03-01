@@ -26,6 +26,10 @@ export class FilaComponent implements OnInit {
 
   public range = (n: number) => Array.from({length: n}, (value, key) => key)
 
+  limpiarCeldas() {
+    this.cceldas.forEach(celda => celda.setLetra(""));
+  }
+
   click(tecla: string) {
     this.letraPulsada.emit(tecla);
   }

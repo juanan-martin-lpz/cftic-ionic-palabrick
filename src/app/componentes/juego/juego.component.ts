@@ -95,8 +95,6 @@ export class JuegoComponent implements OnInit {
             }
           }
         }
-        // si no..
-        // decorar letras
 
         this.intento++;
         this.letra = 0;
@@ -104,13 +102,26 @@ export class JuegoComponent implements OnInit {
 
       }
       else {
+
         this.error = true;
         this.letra = 0;
+        // Pausa para error
+
+        setTimeout(() => {
+          let fx = this.tablero.cfilas.get(this.intento);
+          fx?.limpiarCeldas();
+          this.error = false;
+        }, 2000);
+
+
         // Limpiar la fila
+
+
 
         //
       }
     }
+
 
   }
 }
