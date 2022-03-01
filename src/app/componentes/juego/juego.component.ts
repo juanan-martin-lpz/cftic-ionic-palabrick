@@ -15,7 +15,7 @@ import { TecladoComponent } from '../teclado/teclado.component';
 })
 export class JuegoComponent implements OnInit {
 
-  private readonly max_intentos = 5;
+  private readonly max_intentos = 6;
   private readonly longitud = 5;
 
   private intento = 0;
@@ -27,6 +27,9 @@ export class JuegoComponent implements OnInit {
   public filas!: number;
 
   public error: boolean = false;
+
+  public gameResult: string = "Nada";
+  public endGame = false;
 
   public ready = false;
 
@@ -104,10 +107,22 @@ export class JuegoComponent implements OnInit {
           }
         }
 
-        this.intento++;
-        this.letra = 0;
-        this.palabra = "";
+        if (resultado.filter(i => i == 1).length == 5) {
+          this.endGame = true;
+          this.gameResult = "Acertaste!!!!";
+        }
+        else {
+          this.intento++;
+          this.letra = 0;
+          this.palabra = "";
 
+          console.log(this.intento);
+
+          if (this.intento == this.max_intentos) {
+            this.endGame = true;
+            this.gameResult = "Lo siento, no has acertado :(";
+          }
+        }
       }
       else {
 
@@ -120,16 +135,7 @@ export class JuegoComponent implements OnInit {
           fx?.limpiarCeldas();
           this.error = false;
         }, 2000);
-
-
-        // Limpiar la fila
-
-
-
-        //
       }
     }
-
-
   }
 }

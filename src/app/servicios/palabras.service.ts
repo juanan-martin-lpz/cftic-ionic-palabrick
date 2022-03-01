@@ -157,6 +157,8 @@ export class PalabrasService {
    */
   private repeticiones(pjugador: string[], presultado: number[]): number[] {
 
+    this.semiaciertosIndice = [];
+
     // Si es un semiacierto buscamos a quien cancela. Retorna -1 si cancela a una letra o 0 si no lo hace
     const res = presultado.map((item, index, array) => item == -1 ? this.buscarValido(pjugador[index], array, 0) : item);
 
