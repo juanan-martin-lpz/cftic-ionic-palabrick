@@ -34,10 +34,10 @@ export class AppComponent {
     if (this.palabrasService.comprobarPalabra(this.palabraE)) {
       this.error = false;
       // Metodo Wordle
-      console.log("Metodo Wordle");
-      console.log(this.palabrasService.validarPalabra(this.palabraE));
-      console.log("Metodo Extendido")
-      console.log(this.palabrasService.validarPalabra(this.palabraE, true));
+      //console.log("Metodo Wordle");
+      //console.log(this.palabrasService.validarPalabra(this.palabraE));
+      //console.log("Metodo Extendido")
+      //console.log(this.palabrasService.validarPalabra(this.palabraE, true));
     }
     else {
       this.error = true;

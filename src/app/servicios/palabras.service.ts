@@ -42,7 +42,7 @@ export class PalabrasService {
       await fetch(URL_SERVIDOR)
         .then(response => response.json()
         .then(data => this.palabras = data))
-        .then(() => console.log("completado"))
+        //.then(() => console.log("completado"))
         .catch(err => console.log(err));
 
   }
@@ -56,9 +56,9 @@ export class PalabrasService {
 
     const numero = Math.floor(Math.random() * (this.palabras.length));
 
-    console.log(this.palabras)
+    //console.log(this.palabras)
     let p = this.palabras[numero];
-    console.log(p)
+    //console.log(p)
 
     return p;
   }
@@ -182,7 +182,7 @@ export class PalabrasService {
     this.palabraActual = this.obtenerPalabraRandom();
     this.semiaciertosIndice = [];
 
-    console.log(this.palabraActual);
+    //console.log(this.palabraActual);
 
     return this.palabraActual;
 
@@ -226,10 +226,10 @@ export class PalabrasService {
    **/
   public comprobarPalabra(pal: string): boolean {
 
-    console.log(pal)
+    //console.log(pal)
     const i = this.palabras.includes(pal.toUpperCase());
 
-    console.log(i);
+    //console.log(i);
 
     return i;
 

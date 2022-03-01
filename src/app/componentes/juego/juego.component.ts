@@ -77,7 +77,7 @@ export class JuegoComponent implements OnInit {
 
         let resultado: number[] = this.palabrasService.validarPalabra(this.palabra, true);
 
-        console.log(resultado);
+        //console.log(resultado);
         // Chequear si todos son unos
         for (let i=0; i < this.columnas; i++) {
           switch (resultado[i]) {
@@ -116,7 +116,7 @@ export class JuegoComponent implements OnInit {
           this.letra = 0;
           this.palabra = "";
 
-          console.log(this.intento);
+          //console.log(this.intento);
 
           if (this.intento == this.max_intentos) {
             this.endGame = true;
