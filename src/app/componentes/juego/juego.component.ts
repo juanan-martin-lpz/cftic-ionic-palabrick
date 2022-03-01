@@ -134,6 +134,7 @@ export class JuegoComponent implements OnInit {
           let fx = this.tablero.cfilas.get(this.intento);
           fx?.limpiarCeldas();
           this.error = false;
+          this.palabra = "";
         }, 2000);
       }
     }
