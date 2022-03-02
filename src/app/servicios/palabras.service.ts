@@ -63,6 +63,57 @@ export class PalabrasService {
     return p;
   }
 
+  private noEsta(letra: string, aObjetivo: string) {
+    return !aObjetivo.includes(letra);
+  }
+
+
+  private estaEnPosicion(letra: string, pos: number, aObjetivo: string) {
+    return aObjetivo.split('')[pos] == letra;
+  }
+
+  private estaEnOtraPosicion(letra: string, aObjetivo: string) {
+    return aObjetivo.includes(letra);
+  }
+
+  private cancelarPosicion(pos: number) {
+    this.semiaciertosIndice.push(pos);
+  }
+
+  private sePuedeCancelar(pos: number) {
+    return this.semiaciertosIndice.includes(pos)
+  }
+
+  private posicionesLetra(letra: string, aObjetivo: string) {
+    return aObjetivo.split('').map((l,i,a) => l == letra ? i : undefined).filter(i => typeof i != 'undefined');
+  }
+
+  private comprobar(letra: string, indice: number, a: Array<string>) {
+
+    if (this.noEsta(letra, this.palabraActual)) {
+      return 0;
+    }
+
+    if(this.estaEnPosicion(letra, indice, this.palabraActual)) {
+      return 1;
+    }
+
+    if (this.estaEnOtraPosicion(letra, this.palabraActual)) {
+      const posiciones = this.posicionesLetra(letra, this.palabraActual);
+
+      posiciones.forEach(p => {
+        if(this.sePuedeCancelar(p))
+        {
+          this.cancelarPosicion(p);
+
+          return -1;
+        }
+        else {
+          return 0;
+        }
+      });
+    }
+  }
   /**
    * Comprueba si una letra coincide o no
    *
@@ -86,83 +137,53 @@ export class PalabrasService {
     else {
       if (letrasActuales.includes(letra)) {
         //console.log(`${letra} : -1`);
-        return -1
+
+        // Posicion de la letra
+        const n = letrasActuales.indexOf(letra);
+
+        // Si no esta en la palabra objetivo
+        if (n == -1) {
+          return 0;
+        } // La letra esta
+        else {
+
+
+          // La posicion de la letra ha sido registrada
+          if (this.semiaciertosIndice.includes(n)) {
+
+            const m = letrasActuales.indexOf(letra, n + 1);
+
+            console.log(`${letra} - ${n} - ${m}  - ${this.semiaciertosIndice}`)
+
+            if (m == -1) {
+              return 0;
+            }
+            else {
+
+              this.semiaciertosIndice.push(m);
+              console.log(`${letra} - ${n}  - ${this.semiaciertosIndice}`)
+
+              return -1
+            }
+          }
+          else {
+            if (letrasActuales[n] == a[n]) {
+              return 0;
+            }
+            else {
+              this.semiaciertosIndice.push(n);
+              console.log(`${letra} - ${n} - ${this.semiaciertosIndice}`)
+
+              return -1
+            }
+          }
+        }
       }
       else {
         //console.log(`${letra} : 0`);
         return 0;
       }
     }
-  }
-
-  /**
-   * Busca una letra en el array objetivo para cancelar
-   *
-   * Se cancela insertando el indice cancelado en el array de semiaciertosIndices
-   * Si ya existe un semiacierto cancelado, subsecuentes busquedas retornaran 0
-   *
-   * @param letra letra a buscar
-   * @param pos posicion desde la que buscar
-   * @returns number 0 o -1
-   */
-  private buscarValido(letra: string, array: number[],  pos: number): any {
-
-    // Arry de letras objetivo
-    const letras = this.palabraActual.toUpperCase().split('');
-
-    let n =-1;
-
-    // Obtenemos el indice de la siguiente letra
-    if (pos < array.length) {
-      n = letras.indexOf(letra, pos);
-    }
-    else {
-      n = letras.indexOf(letra, 0);
-
-      if (n == array.length -1) {
-        n =-1;
-      }
-    }
-
-    if (n == -1) {
-      return -1;
-    }
-    else {
-
-      if (this.semiaciertosIndice.includes(n)) {
-        return this.buscarValido(letra, array,  n + 1);
-      }
-      else {
-        if (array[n] == 1) {
-          this.semiaciertosIndice.push(n);
-          return 0;
-        }
-        else {
-          return -1;
-        }
-
-      }
-    }
-  }
-
-  /**
-   * Corrige los semiaciertos
-   *
-   * Si una posiciion determinada es un semiacierto realiza una busqueda para obtener el resultado corregido
-   * En caso contrario, retorna el resultado que hubiere
-   *
-   * @param pjugador array con la palabra del jugador
-   * @param presultado array con el resultado Wordle
-   * @returns number[] array con el resultado extendido
-   */
-  private repeticiones(pjugador: string[], presultado: number[]): number[] {
-
-    this.semiaciertosIndice = [];
-
-    // Si es un semiacierto buscamos a quien cancela. Retorna -1 si cancela a una letra o 0 si no lo hace
-    const res = presultado.map((item, index, array) => item == -1 ? this.buscarValido(pjugador[index], array, 0) : item);
-
-    return res;
   }
 
   // Interfaz publica.
@@ -179,10 +200,11 @@ export class PalabrasService {
    */
   public obtenerPalabra(): string {
 
-    this.palabraActual = this.obtenerPalabraRandom();
+    //this.palabraActual = this.obtenerPalabraRandom();
     this.semiaciertosIndice = [];
+    this.palabraActual = "CABAL";
 
-    //console.log(this.palabraActual);
+    console.log(this.palabraActual);
 
     return this.palabraActual;
 
@@ -202,17 +224,18 @@ export class PalabrasService {
 
     const palabras = palabra.toUpperCase().split('');
 
+    this.semiaciertosIndice = [];
 
     // Comprobamos las letras, nos da un resultado "en bruto"
-    let resultados = <Array<number>>  palabras.map((l,i,a) => this.comprobarLetra(l,i,a));
+    let resultados = <Array<number>>  palabras.map((l,i,a) => this.comprobar(l,i,a));
 
     //console.log(resultados);
 
     // Refinamos los resultados
-    if (metodoExtendido) {
-      resultados = this.repeticiones(palabras, resultados);
+    //if (metodoExtendido) {
+    //  resultados = this.repeticiones(palabras, resultados);
       //console.log(resultados);
-    }
+    //}
 
     return resultados;
   }
