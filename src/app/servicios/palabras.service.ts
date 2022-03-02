@@ -81,108 +81,76 @@ export class PalabrasService {
   }
 
   private sePuedeCancelar(pos: number) {
-    return this.semiaciertosIndice.includes(pos)
+    return !this.semiaciertosIndice.includes(pos);
   }
 
-  private posicionesLetra(letra: string, aObjetivo: string) {
-    return aObjetivo.split('').map((l,i,a) => l == letra ? i : undefined).filter(i => typeof i != 'undefined');
+  private posicionesLetra(letra: string, aObjetivo: string): number[] {
+
+    let aPosiciones = [];
+
+    for(let i = 0; i < aObjetivo.length; i++) {
+
+      if (aObjetivo[i] == letra) {
+        aPosiciones.push(i);
+      }
+    }
+
+    return aPosiciones;
+  }
+
+  private siguienteSinCancelar(aPosiciones: number[]): number {
+    let res = -1;
+
+    for(let n of aPosiciones) {
+      if (!this.semiaciertosIndice.includes(n)) {
+        res = n;
+      }
+    }
+
+    return res;
   }
 
   private comprobar(letra: string, indice: number, a: Array<string>) {
 
     if (this.noEsta(letra, this.palabraActual)) {
+      console.log("No esta la " + letra);
       return 0;
     }
 
     if(this.estaEnPosicion(letra, indice, this.palabraActual)) {
+      console.log("La " + letra + " esta en posicion");
       return 1;
     }
 
     if (this.estaEnOtraPosicion(letra, this.palabraActual)) {
-      const posiciones = this.posicionesLetra(letra, this.palabraActual);
 
-      posiciones.forEach(p => {
-        if(this.sePuedeCancelar(p))
+      console.log("La " + letra + " esta en OTRA posicion");
+
+      const posiciones: number[] = this.posicionesLetra(letra, this.palabraActual);
+
+      console.log("La letra " + letra + " esta en las posiciones " + posiciones);
+
+      let siguiente = this.siguienteSinCancelar(posiciones);
+
+      if (siguiente > -1) {
+        if(this.sePuedeCancelar(siguiente))
         {
-          this.cancelarPosicion(p);
-
+          console.log("La " + letra + " cancela la repeticion en " + siguiente);
+          this.cancelarPosicion(siguiente);
           return -1;
         }
         else {
+          console.log("La " + letra + " no cancela repeticion");
+
           return 0;
         }
-      });
-    }
-  }
-  /**
-   * Comprueba si una letra coincide o no
-   *
-   * Si la letra coincide con la misma posicion en el array objetivo retornamos 1, 0 si no lo hace
-   * y -1 si la letra esta en el array pero no en esa posicion
-   *
-   * @param letra letra a verificar
-   * @param indice indice a procesar en el array objetivo
-   * @param a array con la palabra de jugador. No usado pero necesario para el map
-   * @returns number 1, 0 o -1
-   */
-  private comprobarLetra(letra: string, indice: number, a: Array<string>) {
-
-     const letrasActuales = this.palabraActual.split('');
-
-
-    if (letra == letrasActuales[indice] ) {
-      //console.log(`${letra} : 1`);
-      return 1;
+      }
+      console.log("Sale por el if de estarEnOtraPosicion");
+      return 0;
     }
     else {
-      if (letrasActuales.includes(letra)) {
-        //console.log(`${letra} : -1`);
-
-        // Posicion de la letra
-        const n = letrasActuales.indexOf(letra);
-
-        // Si no esta en la palabra objetivo
-        if (n == -1) {
-          return 0;
-        } // La letra esta
-        else {
-
-
-          // La posicion de la letra ha sido registrada
-          if (this.semiaciertosIndice.includes(n)) {
-
-            const m = letrasActuales.indexOf(letra, n + 1);
-
-            console.log(`${letra} - ${n} - ${m}  - ${this.semiaciertosIndice}`)
-
-            if (m == -1) {
-              return 0;
-            }
-            else {
-
-              this.semiaciertosIndice.push(m);
-              console.log(`${letra} - ${n}  - ${this.semiaciertosIndice}`)
-
-              return -1
-            }
-          }
-          else {
-            if (letrasActuales[n] == a[n]) {
-              return 0;
-            }
-            else {
-              this.semiaciertosIndice.push(n);
-              console.log(`${letra} - ${n} - ${this.semiaciertosIndice}`)
-
-              return -1
-            }
-          }
-        }
-      }
-      else {
-        //console.log(`${letra} : 0`);
-        return 0;
-      }
+      console.log("Sale por el else de estarEnOtraPosicion");
+      return 0;
     }
   }
 
@@ -200,11 +168,10 @@ export class PalabrasService {
    */
   public obtenerPalabra(): string {
 
-    //this.palabraActual = this.obtenerPalabraRandom();
+    this.palabraActual = this.obtenerPalabraRandom();
     this.semiaciertosIndice = [];
-    this.palabraActual = "CABAL";
 
-    console.log(this.palabraActual);
+    //console.log(this.palabraActual);
 
     return this.palabraActual;
 
@@ -216,26 +183,16 @@ export class PalabrasService {
    * Comprueba las letras de la palabra pasada contra la palabra almacenada en @palabraActual
    *
    * @param palabra La palabra a validar
-   * @param metodoExtendido Usa el metodo extendido
    *
    * @returns
    **/
-  public validarPalabra(palabra: string, metodoExtendido: boolean = false): Array<number> {
+  public validarPalabra(palabra: string): Array<number> {
 
     const palabras = palabra.toUpperCase().split('');
 
     this.semiaciertosIndice = [];
 
-    // Comprobamos las letras, nos da un resultado "en bruto"
     let resultados = <Array<number>>  palabras.map((l,i,a) => this.comprobar(l,i,a));
-
-    //console.log(resultados);
-
-    // Refinamos los resultados
-    //if (metodoExtendido) {
-    //  resultados = this.repeticiones(palabras, resultados);
-      //console.log(resultados);
-    //}
 
     return resultados;
   }

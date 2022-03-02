@@ -86,8 +86,7 @@ export class JuegoComponent implements OnInit {
 
       if (this.palabrasService.comprobarPalabra(this.palabra)) {
 
-
-        let resultado: number[] = this.palabrasService.validarPalabra(this.palabra, true);
+        let resultado: number[] = this.palabrasService.validarPalabra(this.palabra);
 
         //console.log(resultado);
         // Chequear si todos son unos
