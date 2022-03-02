@@ -5,4 +5,4 @@
 <h3 *ngIf="endGame">{{gameResult}}</h3>
 
 
-<app-teclado (letraPulsada)="click($event)"></app-teclado>
+<app-teclado (letraPulsada)="click($event)" (borrarLetra)="del()"></app-teclado>

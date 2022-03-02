@@ -1,1 +1,1 @@
-<app-fila *ngFor="let f of range(filas)" [columnas]=columnas (letraPulsada)="click($event)" [styleClasses]=styleClasses></app-fila>
+<app-fila *ngFor="let f of range(filas)" [columnas]=columnas (letraPulsada)="click($event)" (borrarLetra)="del()" [styleClasses]=styleClasses></app-fila>

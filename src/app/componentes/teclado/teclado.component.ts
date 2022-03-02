@@ -10,13 +10,14 @@ import { CeldaComponent } from '../celda/celda.component';
 export class TecladoComponent implements OnInit, AfterViewInit {
 
   @Output() public letraPulsada: EventEmitter<string> = new EventEmitter<string>();
+  @Output() public borrarLetra: EventEmitter<void> = new EventEmitter<void>();
 
   @Input()
   public filas!: number;
 
   public styleClasses = ["tecla", "border-grey"];
 
-  private readonly sletras = "QWERTYUIOPASDFGHJKLÑZXCVBNM";
+  private readonly sletras = "QWERTYUIOPASDFGHJKLÑ0ZXCVBNM0";
   private readonly aletras: string[] = this.sletras.split('');
 
   @ViewChildren(FilaComponent) public cfilas!: QueryList<FilaComponent>;
@@ -81,8 +82,13 @@ export class TecladoComponent implements OnInit, AfterViewInit {
     this.styleClasses = [];
   }
 
+  del() {
+    console.log("teclado borrar")
+    this.borrarLetra.emit();
+  }
+
   click(tecla: string) {
-    this.letraPulsada.emit(tecla);
+      this.letraPulsada.emit(tecla);
   }
 
   setResult(f: number, c: number, l: string) {

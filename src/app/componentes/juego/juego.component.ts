@@ -60,6 +60,18 @@ export class JuegoComponent implements OnInit {
 
   }
 
+  del() {
+    if (this.letra > 0 && !this.endGame) {
+
+      this.palabra = this.palabra.substring(0, this.palabra.length -1);
+      this.letra -= 1;
+
+      console.log(this.palabra)
+      this.tablero.setLetra(this.intento, this.letra, "");
+    }
+
+  }
+
   click(tecla: string) {
 
     this.error = false;

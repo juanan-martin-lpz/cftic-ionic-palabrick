@@ -114,7 +114,7 @@ export class PalabrasService {
 
     // Obtenemos el indice de la siguiente letra
     if (pos < array.length) {
-      n = letras.indexOf(letra, pos + 1);
+      n = letras.indexOf(letra, pos);
     }
     else {
       n = letras.indexOf(letra, 0);

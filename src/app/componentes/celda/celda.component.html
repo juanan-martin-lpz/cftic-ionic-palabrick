@@ -1,3 +1,4 @@
 <div [ngClass]="styleClasses" (click)="click()">
-    <p>{{letra}}</p>
+    <p *ngIf="!symbol">{{letra}}</p>
+    <p *ngIf="symbol">Borrar</p>
 </div>

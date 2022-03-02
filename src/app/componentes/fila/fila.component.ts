@@ -10,6 +10,7 @@ export class FilaComponent implements OnInit {
 
 
   @Output() public letraPulsada: EventEmitter<string> = new EventEmitter<string>();
+  @Output() public borrarLetra: EventEmitter<void> = new EventEmitter<void>();
 
   @Input()
   public columnas!: number;
@@ -30,8 +31,12 @@ export class FilaComponent implements OnInit {
     this.cceldas.forEach(celda => celda.setLetra(""));
   }
 
+  del() {
+    this.borrarLetra.emit();
+  }
+
   click(tecla: string) {
-    this.letraPulsada.emit(tecla);
+      this.letraPulsada.emit(tecla);
   }
 
   hideEmpty() {

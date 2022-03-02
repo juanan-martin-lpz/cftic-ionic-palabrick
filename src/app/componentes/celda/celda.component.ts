@@ -8,10 +8,14 @@ export class CeldaComponent implements OnInit {
 
   public letra!: string;
 
+  public symbol = false;
+  public symbolChar = "";
+
   @Input()
   public styleClasses!: string[];
 
   @Output() public letraPulsada: EventEmitter<string> = new EventEmitter<string>();
+  @Output() public borrarLetra: EventEmitter<void> = new EventEmitter<void>();
 
   constructor() {
     //this.styleClasses = ["hide"];
@@ -34,11 +38,26 @@ export class CeldaComponent implements OnInit {
 
 
   setLetra(letra: string) {
+
     this.letra = letra;
+
+    if (letra != "0") {
+      this.symbol = false;
+    }
+    else {
+      this.symbol = true;
+    }
+
   }
 
   click() {
-    this.letraPulsada.emit(this.letra);
+    if (this.letra != "0") {
+      this.letraPulsada.emit(this.letra);
+    }
+    else {
+      this.borrarLetra.emit();
+    }
+
   }
 
   clearStyleClass() {

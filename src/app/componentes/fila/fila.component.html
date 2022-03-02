@@ -1,3 +1,3 @@
 <div class="fila">
-    <app-celda class="fila" *ngFor="let f of range(columnas)" (letraPulsada)="click($event)" [styleClasses]=styleClasses></app-celda>
+    <app-celda class="fila" *ngFor="let f of range(columnas)" (letraPulsada)="click($event)" (borrarLetra)="del()" [styleClasses]=styleClasses></app-celda>
 </div>
