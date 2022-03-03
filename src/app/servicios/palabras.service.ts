@@ -17,9 +17,11 @@ export class PalabrasService {
   // Palabra objetivo
   private palabraActual: string = "";
 
+  public readyStatus = false;
 
   constructor(private http: HttpClient) {
 
+    console.log("Constructor")
     //this.obtenerFicheroPalabras(); //.subscribe(json => this.palabras = json);
 
   }
@@ -42,7 +44,8 @@ export class PalabrasService {
       await fetch(URL_SERVIDOR)
         .then(response => response.json()
         .then(data => this.palabras = data))
-        //.then(() => console.log("completado"))
+        .then(() => this.readyStatus = true)
+        .then(() => console.log("Completado"))
         .catch(err => console.log(err));
 
   }
@@ -171,11 +174,24 @@ export class PalabrasService {
     this.palabraActual = this.obtenerPalabraRandom();
     this.semiaciertosIndice = [];
 
-    //console.log(this.palabraActual);
+    console.log(this.palabraActual);
 
     return this.palabraActual;
 
   }
+
+  /**
+   * Fuerza a que se juegue con la palabra pasada como parametro
+   *
+   * @param palabra palabra a forzar
+   */
+  public forzarPalabra(palabra: string) {
+
+    this.palabraActual = palabra;
+    this.semiaciertosIndice = [];
+
+  }
+
 
   /**
    * Comprueba la palabra
