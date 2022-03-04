@@ -48,26 +48,12 @@ export class JuegoComponent implements OnInit {
    }
 
   ngOnInit(): void {
-
-
-  }
-
-  cargar() {
-
     if (this.palabrasService.readyStatus) {
       this.palabrasService.obtenerPalabra();
     }
     else {
       this.palabrasService.obtenerFicheroPalabras().then(() => this.palabrasService.obtenerPalabra());
     }
-
-    //this.palabrasService.obtenerPalabra();
-
-  }
-  empezar(){
-
-    this.palabrasService.obtenerPalabra();
-
   }
 
   del() {

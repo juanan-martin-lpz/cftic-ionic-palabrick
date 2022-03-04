@@ -81,10 +81,15 @@ export class PalabrasService {
 
   private cancelarPosicion(pos: number) {
     this.semiaciertosIndice.push(pos);
+    console.log(this.semiaciertosIndice)
   }
 
   private sePuedeCancelar(pos: number) {
     return !this.semiaciertosIndice.includes(pos);
+  }
+
+  private esIgualAPosicion(aPalabra: string, posicion: number, aObjetivo: string) {
+    return (aObjetivo[posicion] == aPalabra[posicion]);
   }
 
   private posicionesLetra(letra: string, aObjetivo: string): number[] {
@@ -102,10 +107,11 @@ export class PalabrasService {
   }
 
   private siguienteSinCancelar(aPosiciones: number[]): number {
+
     let res = -1;
 
     for(let n of aPosiciones) {
-      if (!this.semiaciertosIndice.includes(n)) {
+      if (!this.semiaciertosIndice.includes(n) && res == -1) {
         res = n;
       }
     }
@@ -135,8 +141,9 @@ export class PalabrasService {
 
       let siguiente = this.siguienteSinCancelar(posiciones);
 
+      console.log(siguiente)
       if (siguiente > -1) {
-        if(this.sePuedeCancelar(siguiente))
+        if(this.sePuedeCancelar(siguiente) && !this.esIgualAPosicion(a.join(''), siguiente, this.palabraActual))
         {
           console.log("La " + letra + " cancela la repeticion en " + siguiente);
           this.cancelarPosicion(siguiente);
@@ -148,6 +155,7 @@ export class PalabrasService {
           return 0;
         }
       }
+
       console.log("Sale por el if de estarEnOtraPosicion");
       return 0;
     }
@@ -155,7 +163,9 @@ export class PalabrasService {
       console.log("Sale por el else de estarEnOtraPosicion");
       return 0;
     }
+
   }
+
 
   // Interfaz publica.
 
@@ -223,11 +233,11 @@ export class PalabrasService {
   public comprobarPalabra(pal: string): boolean {
 
     //console.log(pal)
-    const i = this.palabras.includes(pal.toUpperCase());
-
+    //const i = this.palabras.includes(pal.toUpperCase());
+    return true;
     //console.log(i);
 
-    return i;
+    //return i;
 
   }
 }
