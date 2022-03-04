@@ -233,11 +233,11 @@ export class PalabrasService {
   public comprobarPalabra(pal: string): boolean {
 
     //console.log(pal)
-    //const i = this.palabras.includes(pal.toUpperCase());
-    return true;
+    const i = this.palabras.includes(pal.toUpperCase());
+    //return true;
     //console.log(i);
 
-    //return i;
+    return i;
 
   }
 }
